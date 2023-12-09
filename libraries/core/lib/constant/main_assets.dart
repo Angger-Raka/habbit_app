@@ -10,4 +10,7 @@ class MainAssets {
   //! ----------------- Flags ----------------- //
   static const String flagEn = '$_pathFlags/en.svg';
   static const String flagId = '$_pathFlags/id.svg';
+
+  static const String logo = '$pathImage/logo.svg';
+  static const String waifu = '$pathImage/waifu.png';
 }

@@ -1,0 +1,4 @@
+#Fri Dec 08 20:58:09 WIB 2023
+base.0=/home/anggerraka/anggerraka/habbit_app/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex

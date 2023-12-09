@@ -3,4 +3,5 @@ class NamedRoutes {
 
   static const String initial = '/';
   static const String settings = '/settings';
+  static const String home = '/home';
 }

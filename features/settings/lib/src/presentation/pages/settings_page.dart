@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:settings/settings.dart';
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
+import 'package:go_router/go_router.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -74,7 +75,13 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: Text(l10n.changeLanguage),
               ),
             ],
-          )
+          ),
+          ElevatedButton(
+            onPressed: () {
+              context.push(NamedRoutes.home);
+            },
+            child: const Text('Go to Home'),
+          ),
         ],
       ),
     );
