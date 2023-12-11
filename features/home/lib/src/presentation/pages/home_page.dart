@@ -1,6 +1,7 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:blur/blur.dart';
 
 class BaseColor {
   static Color bgColor1 = Color(0xFF01012F);
@@ -213,6 +214,66 @@ class Panel extends StatelessWidget {
                     ),
                   ],
                 ),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          height: double.maxFinite,
+                          // color: Colors.red,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.all(8),
+                                  child: ClipPath(
+                                    clipper: ContainerClipper(),
+                                    child: Container(
+                                      width: double.maxFinite,
+                                      height: double.maxFinite,
+                                      child: Blur(
+                                        blur: 5,
+                                        child: Container(
+                                          width: double.maxFinite,
+                                          height: double.maxFinite,
+                                          // color: Colors.red,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.all(8),
+                                  child: CustomPaint(
+                                    painter: ContainerPainter(
+                                      isleft: false,
+                                    ),
+                                    size: Size.infinite,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                20.sbh,
+                Expanded(
+                  child: Container(
+                    width: double.maxFinite,
+                    height: double.maxFinite,
+                    color: Colors.red,
+                    padding: EdgeInsets.all(8),
+                    child: CustomPaint(
+                      size: Size.infinite,
+                      painter: FooterPainter(),
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -222,63 +283,88 @@ class Panel extends StatelessWidget {
   }
 }
 
-class CustomContainer extends StatelessWidget {
-  const CustomContainer({super.key});
+// class CustomContainer extends StatelessWidget {
+//   const CustomContainer({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: ContainerPainter(),
-      child: Container(
-        width: double.maxFinite,
-        height: 100,
-        // color: Colors.red,
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return CustomPaint(
+//       painter: ContainerPainter(),
+//       child: Container(
+//         width: double.maxFinite,
+//         height: 100,
+//         // color: Colors.red,
+//       ),
+//     );
+//   }
+// }
 
 class ContainerPainter extends CustomPainter {
+  ContainerPainter({required this.isleft});
+
+  bool isleft;
+
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = const Color(0xff45445D).withOpacity(0.4)
-      ..style = PaintingStyle.stroke
+    final paintContainer = Paint()
+      ..color = const Color(0xff45445D66).withOpacity(0.4)
+      // ..color = Colors.transparent
+      ..maskFilter = MaskFilter.blur(BlurStyle.inner, 2)
+      ..style = PaintingStyle.fill
       ..strokeWidth = 3;
 
     final paintCircle = Paint()
-      ..color = const Color(0xff45445D).withOpacity(0.4)
+      ..color = isleft ? Color(0xffC9F5B8) : Color(0xff080A1E)
       ..style = PaintingStyle.fill
       ..strokeWidth = 3;
 
     final path = Path()
-      ..moveTo(0, 0)
+      ..moveTo(30, 0)
       ..lineTo(size.width - (size.width / 3) - 30, 0)
       ..quadraticBezierTo(
         size.width - (size.width / 3),
-        10,
+        0,
         size.width - (size.width / 3),
         30,
-      );
-    // ..quadraticBezierTo(size.width - (size.width / 3), , x2, y2)
-    // ..moveTo(0, 0)
-    // ..lineTo((size.width - (size.width / 3)) - 30, 0)
-    // ..quadraticBezierTo(
-    //   (size.width - (size.width / 3)),
-    //   10,
-    //   (size.width - (size.width / 3)),
-    //   50,
-    // )
-    // ..quadraticBezierTo(
-    //   (size.width - (size.width / 3)),
-    //   100,
-    //   (size.width - (size.width / 3)) + 30,
-    //   100,
-    // )
-    // ..quadraticBezierTo(
-    //     size.width, (size.width / 3) - 30, size.width, size.height);
+      )
+      ..quadraticBezierTo(
+        size.width - (size.width / 3),
+        60,
+        size.width - (size.width / 3) + 30,
+        60,
+      )
+      ..quadraticBezierTo(
+        size.width,
+        60,
+        size.width,
+        100,
+      )
+      ..lineTo(size.width, size.height - 30)
+      ..quadraticBezierTo(
+        size.width,
+        size.height,
+        size.width - 30,
+        size.height,
+      )
+      ..lineTo(30, size.height)
+      ..quadraticBezierTo(
+        0,
+        size.height,
+        0,
+        size.height - 30,
+      )
+      ..lineTo(0, 30)
+      ..quadraticBezierTo(0, 0, 30, 0);
 
-    canvas.drawPath(path, paint);
+    canvas.drawPath(path, paintContainer);
+    canvas.drawCircle(
+      Offset(
+        size.width - 26,
+        26,
+      ),
+      26,
+      paintCircle,
+    );
   }
 
   @override
@@ -287,3 +373,99 @@ class ContainerPainter extends CustomPainter {
   @override
   bool shouldRebuildSemantics(ContainerPainter oldDelegate) => false;
 }
+
+class FooterPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = const Color(0xff45445D).withOpacity(0.4)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3;
+
+    final path = Path()
+      ..moveTo(30, 0)
+      ..lineTo(size.width - 30, 0)
+      ..quadraticBezierTo(
+        size.width,
+        0,
+        size.width,
+        30,
+      )
+      ..lineTo(size.width, size.height - 30)
+      ..quadraticBezierTo(
+        size.width,
+        size.height,
+        size.width - 30,
+        size.height,
+      )
+      ..lineTo(3 * (size.width / 4), size.height) // - 30
+      ..lineTo(2 * (size.width / 4), size.height - (size.height / 4))
+      ..lineTo(1 * (size.width / 4), size.height)
+      ..lineTo(30, size.height)
+      ..quadraticBezierTo(0, size.height, 0, size.height - 30)
+      ..lineTo(0, 30)
+      ..quadraticBezierTo(0, 0, 30, 0);
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(FooterPainter oldDelegate) => false;
+
+  @override
+  bool shouldRebuildSemantics(FooterPainter oldDelegate) => false;
+}
+
+class ContainerClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path()
+      ..moveTo(30, 0)
+      ..lineTo(size.width - (size.width / 3) - 30, 0)
+      ..quadraticBezierTo(
+        size.width - (size.width / 3),
+        0,
+        size.width - (size.width / 3),
+        30,
+      )
+      ..quadraticBezierTo(
+        size.width - (size.width / 3),
+        60,
+        size.width - (size.width / 3) + 30,
+        60,
+      )
+      ..quadraticBezierTo(
+        size.width,
+        60,
+        size.width,
+        100,
+      )
+      ..lineTo(size.width, size.height - 30)
+      ..quadraticBezierTo(
+        size.width,
+        size.height,
+        size.width - 30,
+        size.height,
+      )
+      ..lineTo(30, size.height)
+      ..quadraticBezierTo(
+        0,
+        size.height,
+        0,
+        size.height - 30,
+      )
+      ..lineTo(0, 30)
+      ..quadraticBezierTo(0, 0, 30, 0);
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
+
+//  | 1 | 2 | 3 |
+
+// 1/3
+
+//  100 / 3 
